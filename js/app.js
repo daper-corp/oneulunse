@@ -8,7 +8,8 @@ const App = {
     currentScreen: 'main',
     fortune: null,
     streak: 0,
-    visitCount: 0
+    visitCount: 0,
+    isSharedView: false
   },
 
   // DOM 요소 캐시
@@ -23,6 +24,71 @@ const App = {
     this.loadSavedData();
     this.initScrollProgress();
     this.registerServiceWorker();
+
+    // 공유된 URL인지 확인
+    this.checkSharedUrl();
+  },
+
+  /**
+   * URL 인코딩 (이름 + 생년월일 → 짧은 코드)
+   */
+  encodeFortuneUrl(name, birth) {
+    const data = `${name}|${birth}`;
+    // Base64 인코딩 후 URL-safe하게 변환
+    const encoded = btoa(unescape(encodeURIComponent(data)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    return encoded;
+  },
+
+  /**
+   * URL 디코딩 (짧은 코드 → 이름 + 생년월일)
+   */
+  decodeFortuneUrl(code) {
+    try {
+      // URL-safe Base64를 일반 Base64로 변환
+      let base64 = code.replace(/-/g, '+').replace(/_/g, '/');
+      // 패딩 추가
+      while (base64.length % 4) {
+        base64 += '=';
+      }
+      const decoded = decodeURIComponent(escape(atob(base64)));
+      const [name, birth] = decoded.split('|');
+      if (name && birth) {
+        return { name, birth };
+      }
+    } catch (e) {
+      console.error('URL 디코딩 실패:', e);
+    }
+    return null;
+  },
+
+  /**
+   * 공유 URL 생성
+   */
+  generateShareUrl(name, birth) {
+    const code = this.encodeFortuneUrl(name, birth);
+    return `${window.location.origin}/${code}`;
+  },
+
+  /**
+   * 공유된 URL 확인 및 처리
+   */
+  checkSharedUrl() {
+    const path = window.location.pathname;
+    // 루트(/)가 아니면 공유된 URL로 판단
+    if (path && path !== '/' && path.length > 1) {
+      const code = path.slice(1); // 앞의 / 제거
+      const data = this.decodeFortuneUrl(code);
+
+      if (data) {
+        this.state.isSharedView = true;
+        // 운세 생성 및 결과 표시
+        this.state.fortune = Fortune.generate(data.name, data.birth);
+        this.showResultScreen();
+      }
+    }
   },
 
   /**
@@ -98,7 +164,7 @@ const App = {
     this.elements.shareUrl.addEventListener('click', () => this.shareUrl());
 
     // 다시보기
-    this.elements.retryBtn.addEventListener('click', () => this.showScreen('main'));
+    this.elements.retryBtn.addEventListener('click', () => this.goToMain());
 
     // 입력 필드 에러 초기화
     this.elements.nameInput.addEventListener('input', () => {
@@ -301,6 +367,12 @@ const App = {
 
     // 운세 생성
     this.state.fortune = Fortune.generate(name, birth);
+    this.state.isSharedView = false;
+
+    // URL 업데이트 (히스토리에 추가)
+    const shareUrl = this.generateShareUrl(name, birth);
+    const code = this.encodeFortuneUrl(name, birth);
+    window.history.pushState({ name, birth }, '', `/${code}`);
 
     // 로딩 화면으로 이동
     this.showLoadingScreen();
@@ -324,6 +396,15 @@ const App = {
       // 스크롤 초기화
       window.scrollTo(0, 0);
     }
+  },
+
+  /**
+   * 메인 화면으로 이동 (URL 초기화)
+   */
+  goToMain() {
+    this.state.isSharedView = false;
+    window.history.pushState({}, '', '/');
+    this.showScreen('main');
   },
 
   /**
@@ -488,11 +569,22 @@ const App = {
   },
 
   /**
+   * 현재 공유 URL 가져오기
+   */
+  getShareUrl() {
+    const fortune = this.state.fortune;
+    if (!fortune) return window.location.origin;
+    return this.generateShareUrl(fortune.name, fortune.date.includes('-') ? fortune.date : localStorage.getItem('fortune_birth'));
+  },
+
+  /**
    * 카카오톡 공유
    */
   shareKakao() {
     const fortune = this.state.fortune;
     if (!fortune) return;
+
+    const shareUrl = window.location.href;
 
     // 카카오 SDK가 없으면 URL 공유로 대체
     if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
@@ -505,18 +597,18 @@ const App = {
       content: {
         title: `${fortune.name}님의 오늘 운세`,
         description: `총운 ${fortune.overall.score}점! ${fortune.overall.title} - ${fortune.advice}`,
-        imageUrl: 'https://oneulunse.com/assets/share-image.png',
+        imageUrl: 'https://oneulunse.com/assets/og-image.png',
         link: {
-          mobileWebUrl: window.location.origin,
-          webUrl: window.location.origin
+          mobileWebUrl: shareUrl,
+          webUrl: shareUrl
         }
       },
       buttons: [
         {
-          title: '나도 운세 보기',
+          title: '운세 결과 보기',
           link: {
-            mobileWebUrl: window.location.origin,
-            webUrl: window.location.origin
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl
           }
         }
       ]
@@ -530,8 +622,9 @@ const App = {
     const fortune = this.state.fortune;
     if (!fortune) return;
 
+    const shareUrl = window.location.href;
     const shareText = Fortune.generateShareText(fortune);
-    const fullText = shareText + ' ' + window.location.origin;
+    const fullText = shareText + ' ' + shareUrl;
 
     // 클립보드에 텍스트 복사 후 인스타그램 앱으로 이동
     try {
@@ -564,6 +657,7 @@ const App = {
     const fortune = this.state.fortune;
     if (!fortune) return;
 
+    const shareUrl = window.location.href;
     const scoreText = fortune.overall.score >= 80 ? '대박' :
                       fortune.overall.score >= 60 ? '좋은' : '평범한';
 
@@ -571,9 +665,9 @@ const App = {
                       `${fortune.name}님: ${scoreText} 운세! ${fortune.overall.emoji}\n` +
                       `총운 ${fortune.overall.score}점\n\n` +
                       `💬 "${fortune.advice}"\n\n` +
-                      `나도 확인해보기 👉`;
+                      `결과 보기 👉`;
 
-    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}`;
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
 
     window.open(tweetUrl, '_blank', 'width=550,height=420');
   },
@@ -585,16 +679,17 @@ const App = {
     const fortune = this.state.fortune;
     if (!fortune) return;
 
+    const shareUrl = window.location.href;
     const shareText = Fortune.generateShareText(fortune);
-    const fullText = shareText + ' ' + window.location.origin;
+    const fullText = shareText + ' ' + shareUrl;
 
     try {
       // Web Share API 시도
       if (navigator.share) {
         await navigator.share({
-          title: '오늘 운세',
+          title: `${fortune.name}님의 오늘 운세`,
           text: shareText,
-          url: window.location.origin
+          url: shareUrl
         });
         return;
       }
