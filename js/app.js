@@ -21,7 +21,6 @@ const App = {
     this.cacheElements();
     this.bindEvents();
     this.loadSavedData();
-    this.updateVisitorCount();
     this.setMaxBirthDate();
     this.initScrollProgress();
     this.registerServiceWorker();
@@ -76,7 +75,6 @@ const App = {
       streakBadge: document.getElementById('streak-badge'),
       streakIcon: document.getElementById('streak-icon'),
       streakText: document.getElementById('streak-text'),
-      visitorCount: document.getElementById('visitor-count'),
       scrollProgress: document.getElementById('scroll-progress'),
       toast: document.getElementById('toast')
     };
@@ -165,30 +163,6 @@ const App = {
     this.state.streak = streak;
     localStorage.setItem('fortune_streak', streak.toString());
     localStorage.setItem('fortune_last_visit', today);
-  },
-
-  /**
-   * 방문자 카운터 업데이트 (시뮬레이션)
-   */
-  updateVisitorCount() {
-    const now = new Date();
-    const hours = now.getHours();
-
-    // 시간대별 기본 방문자
-    let baseCount = 5000;
-    if (hours >= 7 && hours < 10) baseCount = 8000;  // 아침
-    else if (hours >= 10 && hours < 12) baseCount = 12000;  // 오전
-    else if (hours >= 12 && hours < 14) baseCount = 15000;  // 점심
-    else if (hours >= 14 && hours < 18) baseCount = 18000;  // 오후
-    else if (hours >= 18 && hours < 22) baseCount = 20000;  // 저녁
-    else if (hours >= 22) baseCount = 10000;  // 밤
-
-    // 랜덤 변동
-    const randomVariation = Math.floor(Math.random() * 3000) - 1500;
-    const count = baseCount + randomVariation;
-
-    // 숫자 애니메이션
-    this.animateNumber(this.elements.visitorCount, 0, count, 1500);
   },
 
   /**
