@@ -436,7 +436,7 @@ const App = {
       content: {
         title: `${fortune.name}님의 오늘 운세`,
         description: `총운 ${fortune.overall.score}점! ${fortune.overall.title} - ${fortune.advice}`,
-        imageUrl: 'https://oneulunse.vercel.app/assets/share-image.png',
+        imageUrl: 'https://oneulunse.com/assets/share-image.png',
         link: {
           mobileWebUrl: window.location.origin,
           webUrl: window.location.origin

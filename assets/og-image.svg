@@ -90,11 +90,4 @@
           text-anchor="middle">무료 운세 · 금전운 · 연애운 · 행운의 번호</text>
   </g>
 
-  <!-- Bottom URL hint -->
-  <text x="1150" y="600"
-        font-family="Arial, sans-serif"
-        font-size="20"
-        fill="#FFFFFF"
-        opacity="0.6"
-        text-anchor="end">oneulunse.vercel.app</text>
 </svg>

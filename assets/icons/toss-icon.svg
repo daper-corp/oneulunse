@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9333EA"/>
+      <stop offset="100%" style="stop-color:#EC4899"/>
+    </linearGradient>
+    <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FCD34D"/>
+      <stop offset="100%" style="stop-color:#F59E0B"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background with rounded corners (Toss style) -->
+  <rect width="600" height="600" rx="120" fill="url(#bgGrad)"/>
+
+  <!-- Subtle pattern overlay -->
+  <g opacity="0.1">
+    <circle cx="100" cy="100" r="200" fill="#FFF"/>
+    <circle cx="550" cy="550" r="180" fill="#000"/>
+  </g>
+
+  <!-- Decorative stars -->
+  <g fill="#FFF" opacity="0.5">
+    <circle cx="120" cy="140" r="6"/>
+    <circle cx="480" cy="100" r="5"/>
+    <circle cx="500" cy="480" r="7"/>
+    <circle cx="100" cy="460" r="5"/>
+    <circle cx="180" cy="380" r="4"/>
+    <circle cx="450" cy="200" r="4"/>
+  </g>
+
+  <!-- Main crystal orb -->
+  <g transform="translate(300, 260)" filter="url(#shadow)">
+    <!-- Outer glow circle -->
+    <circle cx="0" cy="0" r="150" fill="#FFF" opacity="0.15"/>
+
+    <!-- Main orb -->
+    <circle cx="0" cy="0" r="120" fill="url(#orbGrad)" filter="url(#glow)"/>
+
+    <!-- Orb highlight (top-left) -->
+    <ellipse cx="-35" cy="-40" rx="45" ry="32" fill="#FFF" opacity="0.55"/>
+
+    <!-- Inner sparkle -->
+    <circle cx="35" cy="30" r="12" fill="#FFF" opacity="0.4"/>
+  </g>
+
+  <!-- Sun rays around the orb -->
+  <g stroke="#FCD34D" stroke-width="8" stroke-linecap="round" opacity="0.85">
+    <line x1="300" y1="95" x2="300" y2="55"/>
+    <line x1="300" y1="425" x2="300" y2="465"/>
+    <line x1="135" y1="260" x2="95" y2="260"/>
+    <line x1="465" y1="260" x2="505" y2="260"/>
+    <line x1="183" y1="143" x2="155" y2="115"/>
+    <line x1="417" y1="143" x2="445" y2="115"/>
+    <line x1="183" y1="377" x2="155" y2="405"/>
+    <line x1="417" y1="377" x2="445" y2="405"/>
+  </g>
+
+  <!-- Text "운세" -->
+  <text x="300" y="540"
+        font-family="'Noto Sans KR', Arial, sans-serif"
+        font-size="90"
+        font-weight="700"
+        fill="#FFFFFF"
+        text-anchor="middle"
+        filter="url(#shadow)">운세</text>
+</svg>
