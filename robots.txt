@@ -1,0 +1,13 @@
+# 오늘의 운세 - robots.txt
+# https://oneulunse.vercel.app
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Sitemaps
+Sitemap: https://oneulunse.vercel.app/sitemap.xml
+
+# Crawl-delay (optional, for polite crawlers)
+Crawl-delay: 1

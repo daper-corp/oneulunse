@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+  <!-- Primary Meta Tags -->
+  <title>오늘의 운세 - 매일 새로운 무료 운세 | 금전운, 연애운</title>
+  <meta name="description" content="오늘 하루 어떨까요? 이름과 생년월일로 오늘의 금전운, 연애운을 무료로 확인하세요. 매일 업데이트되는 일일 운세 서비스.">
+  <meta name="keywords" content="오늘의 운세, 무료 운세, 일일 운세, 오늘 운세, 금전운, 연애운, 타로, 별자리 운세">
+  <meta name="author" content="오늘의 운세">
+  <meta name="theme-color" content="#9333EA">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="오늘의 운세 - 오늘 하루 어떨까요?">
+  <meta property="og:description" content="매일 업데이트되는 무료 운세! 금전운, 연애운을 지금 확인하세요.">
+  <meta property="og:url" content="https://oneulunse.vercel.app">
+  <meta property="og:site_name" content="오늘의 운세">
+  <meta property="og:locale" content="ko_KR">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="오늘의 운세">
+  <meta name="twitter:description" content="오늘 하루 어떨까요? 무료로 확인하세요!">
+
+  <!-- PWA -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="오늘운세">
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://oneulunse.vercel.app">
+
+  <!-- Preload Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "오늘의 운세",
+    "description": "매일 업데이트되는 무료 운세 서비스",
+    "url": "https://oneulunse.vercel.app",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- 화면 1: 메인 입력 화면 -->
+    <section id="screen-main" class="screen active">
+      <!-- 광고 배너 #1 -->
+      <div class="ad-banner ad-banner-top">
+        <!-- Google AdSense #1 - 상단 배너 320x100 -->
+        <div class="ad-placeholder">광고 영역</div>
+      </div>
+
+      <div class="main-content">
+        <div class="logo-section">
+          <div class="logo-icon">&#9728;&#65039;</div>
+          <h1 class="title">오늘의 운세</h1>
+          <p class="subtitle">오늘 하루 어떨까요?</p>
+        </div>
+
+        <form id="fortune-form" class="input-section">
+          <div class="input-group">
+            <label for="name-input" class="input-label">이름</label>
+            <input
+              type="text"
+              id="name-input"
+              class="input-field"
+              placeholder="이름을 입력하세요"
+              maxlength="20"
+              autocomplete="name"
+              required
+            >
+            <span class="input-error" id="name-error"></span>
+          </div>
+
+          <div class="input-group">
+            <label for="birth-input" class="input-label">생년월일</label>
+            <input
+              type="date"
+              id="birth-input"
+              class="input-field"
+              required
+            >
+            <span class="input-error" id="birth-error"></span>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <span class="btn-text">오늘 운세 보기</span>
+            <span class="btn-icon">&#10024;</span>
+          </button>
+        </form>
+
+        <div class="visitor-counter">
+          <span class="counter-icon">&#10024;</span>
+          <span>오늘 <strong id="visitor-count">0</strong>명이 확인했어요</span>
+        </div>
+      </div>
+
+      <!-- 광고 배너 #2 -->
+      <div class="ad-banner ad-banner-bottom">
+        <!-- Google AdSense #2 - 하단 배너 320x100 -->
+        <div class="ad-placeholder">광고 영역</div>
+      </div>
+    </section>
+
+    <!-- 화면 2: 로딩 화면 -->
+    <section id="screen-loading" class="screen">
+      <div class="loading-content">
+        <div class="loading-icon">&#128302;</div>
+        <p class="loading-text" id="loading-text">오늘의 운세를 불러오는 중...</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- 전면 광고 영역 -->
+      <div class="interstitial-ad">
+        <!-- Google AdSense Interstitial -->
+        <div class="ad-placeholder ad-interstitial">전면 광고 영역</div>
+      </div>
+    </section>
+
+    <!-- 화면 3: 결과 화면 -->
+    <section id="screen-result" class="screen">
+      <div class="scroll-progress" id="scroll-progress"></div>
+
+      <header class="result-header">
+        <h2 class="result-title"><span id="result-name"></span>님의 오늘 운세</h2>
+        <p class="result-date" id="result-date"></p>
+      </header>
+
+      <div class="result-content">
+        <!-- 총운 카드 -->
+        <div class="fortune-card card-overall animate-card">
+          <div class="card-header">
+            <span class="card-icon">&#128202;</span>
+            <h3 class="card-title">오늘의 총운</h3>
+          </div>
+          <div class="score-section">
+            <div class="score-circle">
+              <span class="score-value" id="overall-score">0</span>
+              <span class="score-label">점</span>
+            </div>
+            <div class="score-emoji" id="overall-emoji"></div>
+          </div>
+          <h4 class="fortune-title" id="overall-title"></h4>
+          <p class="fortune-content" id="overall-content"></p>
+        </div>
+
+        <!-- 광고 배너 #3 -->
+        <div class="ad-banner ad-banner-result">
+          <!-- Google AdSense #3 -->
+          <div class="ad-placeholder">광고 영역</div>
+        </div>
+
+        <!-- 금전운 카드 -->
+        <div class="fortune-card card-money animate-card">
+          <div class="card-header">
+            <span class="card-icon">&#128176;</span>
+            <h3 class="card-title">금전운</h3>
+          </div>
+          <div class="fortune-emoji" id="money-emoji"></div>
+          <h4 class="fortune-title" id="money-title"></h4>
+          <p class="fortune-content" id="money-content"></p>
+        </div>
+
+        <!-- 연애운 카드 -->
+        <div class="fortune-card card-love animate-card">
+          <div class="card-header">
+            <span class="card-icon">&#10084;&#65039;</span>
+            <h3 class="card-title">연애운</h3>
+          </div>
+          <div class="fortune-emoji" id="love-emoji"></div>
+          <h4 class="fortune-title" id="love-title"></h4>
+          <p class="fortune-content" id="love-content"></p>
+        </div>
+
+        <!-- 광고 배너 #4 -->
+        <div class="ad-banner ad-banner-result">
+          <!-- Google AdSense #4 - 네이티브 광고 -->
+          <div class="ad-placeholder">광고 영역</div>
+        </div>
+
+        <!-- 행운 요소 그리드 -->
+        <div class="lucky-grid">
+          <div class="lucky-item animate-card">
+            <span class="lucky-icon">&#9200;</span>
+            <span class="lucky-label">행운의 시간</span>
+            <span class="lucky-value" id="lucky-time"></span>
+          </div>
+          <div class="lucky-item animate-card">
+            <span class="lucky-icon">&#127912;</span>
+            <span class="lucky-label">행운의 색깔</span>
+            <span class="lucky-value">
+              <span class="color-dot" id="lucky-color-dot"></span>
+              <span id="lucky-color"></span>
+            </span>
+          </div>
+          <div class="lucky-item animate-card">
+            <span class="lucky-icon">&#128290;</span>
+            <span class="lucky-label">행운의 번호</span>
+            <span class="lucky-value" id="lucky-numbers"></span>
+          </div>
+          <div class="lucky-item animate-card">
+            <span class="lucky-icon">&#9749;</span>
+            <span class="lucky-label">추천 간식</span>
+            <span class="lucky-value" id="lucky-snack"></span>
+          </div>
+        </div>
+
+        <!-- 오늘의 한마디 -->
+        <div class="fortune-card card-advice animate-card">
+          <div class="card-header">
+            <span class="card-icon">&#128172;</span>
+            <h3 class="card-title">오늘의 한마디</h3>
+          </div>
+          <p class="advice-content" id="advice-content"></p>
+        </div>
+
+        <!-- 주의사항 -->
+        <div class="fortune-card card-caution animate-card">
+          <div class="card-header">
+            <span class="card-icon">&#9888;&#65039;</span>
+            <h3 class="card-title">주의사항</h3>
+          </div>
+          <p class="caution-content" id="caution-content"></p>
+        </div>
+
+        <!-- 공유 섹션 -->
+        <div class="share-section">
+          <h4 class="share-title">친구에게 공유하기</h4>
+          <div class="share-buttons">
+            <button class="share-btn share-kakao" id="share-kakao">
+              <span class="share-icon">&#128172;</span>
+              <span>카톡 공유</span>
+            </button>
+            <button class="share-btn share-url" id="share-url">
+              <span class="share-icon">&#128279;</span>
+              <span>링크 복사</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 다시보기 버튼 -->
+        <button class="retry-btn" id="retry-btn">
+          <span>다시 보기</span>
+        </button>
+
+        <!-- 광고 배너 #5 -->
+        <div class="ad-banner ad-banner-bottom">
+          <!-- Google AdSense #5 -->
+          <div class="ad-placeholder">광고 영역</div>
+        </div>
+
+        <!-- 스트릭 배지 -->
+        <div class="streak-badge" id="streak-badge">
+          <span class="streak-icon" id="streak-icon">&#128293;</span>
+          <span class="streak-text" id="streak-text"></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 토스트 메시지 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="/js/fortuneData.js"></script>
+  <script src="/js/fortune.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
