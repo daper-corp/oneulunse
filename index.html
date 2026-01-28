@@ -108,9 +108,13 @@
           <div class="input-group">
             <label for="birth-input" class="input-label">생년월일</label>
             <input
-              type="date"
+              type="text"
               id="birth-input"
               class="input-field"
+              placeholder="YYYY-MM-DD"
+              maxlength="10"
+              inputmode="numeric"
+              autocomplete="bday"
               required
             >
             <span class="input-error" id="birth-error"></span>

@@ -21,7 +21,6 @@ const App = {
     this.cacheElements();
     this.bindEvents();
     this.loadSavedData();
-    this.setMaxBirthDate();
     this.initScrollProgress();
     this.registerServiceWorker();
   },
@@ -107,10 +106,82 @@ const App = {
       this.elements.nameError.textContent = '';
     });
 
-    this.elements.birthInput.addEventListener('change', () => {
+    // 생년월일 자동 포맷팅 (YYYY-MM-DD)
+    this.elements.birthInput.addEventListener('input', (e) => {
       this.elements.birthInput.classList.remove('error');
       this.elements.birthError.textContent = '';
+      this.formatBirthInput(e);
     });
+
+    // 생년월일 붙여넣기 처리
+    this.elements.birthInput.addEventListener('paste', (e) => {
+      setTimeout(() => this.formatBirthInput({ target: this.elements.birthInput }), 0);
+    });
+  },
+
+  /**
+   * 생년월일 입력 자동 포맷팅
+   */
+  formatBirthInput(e) {
+    const input = e.target;
+    let value = input.value.replace(/\D/g, ''); // 숫자만 추출
+
+    // 최대 8자리 (YYYYMMDD)
+    if (value.length > 8) {
+      value = value.slice(0, 8);
+    }
+
+    // 자동 하이픈 삽입
+    let formatted = '';
+    if (value.length > 0) {
+      formatted = value.slice(0, 4); // YYYY
+    }
+    if (value.length > 4) {
+      formatted += '-' + value.slice(4, 6); // -MM
+    }
+    if (value.length > 6) {
+      formatted += '-' + value.slice(6, 8); // -DD
+    }
+
+    input.value = formatted;
+  },
+
+  /**
+   * 생년월일 유효성 검사
+   */
+  validateBirthInput(value) {
+    // 형식 검사 (YYYY-MM-DD)
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(value)) {
+      return { valid: false, message: '올바른 형식으로 입력해주세요 (YYYY-MM-DD)' };
+    }
+
+    const [year, month, day] = value.split('-').map(Number);
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day);
+
+    // 연도 범위 검사 (1900 ~ 현재)
+    if (year < 1900 || year > today.getFullYear()) {
+      return { valid: false, message: '올바른 연도를 입력해주세요' };
+    }
+
+    // 월 범위 검사
+    if (month < 1 || month > 12) {
+      return { valid: false, message: '올바른 월을 입력해주세요 (01-12)' };
+    }
+
+    // 일 범위 검사
+    const lastDay = new Date(year, month, 0).getDate();
+    if (day < 1 || day > lastDay) {
+      return { valid: false, message: '올바른 일을 입력해주세요' };
+    }
+
+    // 미래 날짜 검사
+    if (birthDate > today) {
+      return { valid: false, message: '미래 날짜는 입력할 수 없습니다' };
+    }
+
+    return { valid: true };
   },
 
   /**
@@ -194,19 +265,6 @@ const App = {
   },
 
   /**
-   * 생년월일 최대값 설정 (오늘)
-   */
-  setMaxBirthDate() {
-    const today = new Date().toISOString().split('T')[0];
-    this.elements.birthInput.max = today;
-
-    // 최소값 (100년 전)
-    const minDate = new Date();
-    minDate.setFullYear(minDate.getFullYear() - 100);
-    this.elements.birthInput.min = minDate.toISOString().split('T')[0];
-  },
-
-  /**
    * 폼 제출 처리
    */
   handleSubmit() {
@@ -224,8 +282,15 @@ const App = {
 
     if (!birth) {
       this.elements.birthInput.classList.add('error');
-      this.elements.birthError.textContent = '생년월일을 선택해주세요';
+      this.elements.birthError.textContent = '생년월일을 입력해주세요';
       isValid = false;
+    } else {
+      const birthValidation = this.validateBirthInput(birth);
+      if (!birthValidation.valid) {
+        this.elements.birthInput.classList.add('error');
+        this.elements.birthError.textContent = birthValidation.message;
+        isValid = false;
+      }
     }
 
     if (!isValid) return;
