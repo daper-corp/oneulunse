@@ -547,15 +547,19 @@ body {
 .share-buttons {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .share-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  font-size: 14px;
+  justify-content: center;
+  gap: 4px;
+  width: 72px;
+  height: 72px;
+  font-size: 12px;
   font-weight: 500;
   font-family: var(--font-family);
   color: white;
@@ -573,17 +577,25 @@ body {
   transform: scale(0.95);
 }
 
+.share-icon {
+  font-size: 24px;
+}
+
 .share-kakao {
   background: #FEE500;
   color: #3C1E1E;
 }
 
-.share-url {
-  background: #6B7280;
+.share-instagram {
+  background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%);
 }
 
-.share-icon {
-  font-size: 16px;
+.share-x {
+  background: #000000;
+}
+
+.share-url {
+  background: #6B7280;
 }
 
 /* 다시보기 버튼 */

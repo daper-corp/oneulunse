@@ -70,6 +70,8 @@ const App = {
 
       // 공유 & 기타
       shareKakao: document.getElementById('share-kakao'),
+      shareInstagram: document.getElementById('share-instagram'),
+      shareX: document.getElementById('share-x'),
       shareUrl: document.getElementById('share-url'),
       retryBtn: document.getElementById('retry-btn'),
       streakBadge: document.getElementById('streak-badge'),
@@ -92,6 +94,8 @@ const App = {
 
     // 공유 버튼
     this.elements.shareKakao.addEventListener('click', () => this.shareKakao());
+    this.elements.shareInstagram.addEventListener('click', () => this.shareInstagram());
+    this.elements.shareX.addEventListener('click', () => this.shareX());
     this.elements.shareUrl.addEventListener('click', () => this.shareUrl());
 
     // 다시보기
@@ -452,6 +456,61 @@ const App = {
         }
       ]
     });
+  },
+
+  /**
+   * 인스타그램 공유 (스토리)
+   */
+  async shareInstagram() {
+    const fortune = this.state.fortune;
+    if (!fortune) return;
+
+    const shareText = Fortune.generateShareText(fortune);
+    const fullText = shareText + ' ' + window.location.origin;
+
+    // 클립보드에 텍스트 복사 후 인스타그램 앱으로 이동
+    try {
+      await navigator.clipboard.writeText(fullText);
+      this.showToast('텍스트가 복사되었습니다! 인스타그램에서 붙여넣기 하세요.');
+
+      // 인스타그램 앱 열기 시도
+      setTimeout(() => {
+        window.open('https://www.instagram.com/', '_blank');
+      }, 1000);
+    } catch (err) {
+      // 폴백
+      const textarea = document.createElement('textarea');
+      textarea.value = fullText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      this.showToast('텍스트가 복사되었습니다! 인스타그램에서 붙여넣기 하세요.');
+      setTimeout(() => {
+        window.open('https://www.instagram.com/', '_blank');
+      }, 1000);
+    }
+  },
+
+  /**
+   * X (Twitter) 공유
+   */
+  shareX() {
+    const fortune = this.state.fortune;
+    if (!fortune) return;
+
+    const scoreText = fortune.overall.score >= 80 ? '대박' :
+                      fortune.overall.score >= 60 ? '좋은' : '평범한';
+
+    const tweetText = `🔮 오늘 운세 결과!\n\n` +
+                      `${fortune.name}님: ${scoreText} 운세! ${fortune.overall.emoji}\n` +
+                      `총운 ${fortune.overall.score}점\n\n` +
+                      `💬 "${fortune.advice}"\n\n` +
+                      `나도 확인해보기 👉`;
+
+    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(window.location.origin)}`;
+
+    window.open(tweetUrl, '_blank', 'width=550,height=420');
   },
 
   /**
