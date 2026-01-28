@@ -1,5 +1,5 @@
 {
-  "name": "오늘의 운세",
+  "name": "오늘 운세",
   "short_name": "오늘운세",
   "description": "매일 새로운 무료 운세 - 오늘 하루 어떨까요?",
   "start_url": "/",
@@ -66,14 +66,14 @@
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "오늘의 운세 메인 화면"
+      "label": "오늘 운세 메인 화면"
     }
   ],
   "shortcuts": [
     {
       "name": "오늘 운세 보기",
       "short_name": "운세 보기",
-      "description": "바로 오늘의 운세를 확인하세요",
+      "description": "바로 오늘 운세를 확인하세요",
       "url": "/",
       "icons": [
         {

@@ -1,5 +1,5 @@
 /**
- * 오늘의 운세 - 메인 앱 로직
+ * 오늘 운세 - 메인 앱 로직
  */
 
 const App = {
@@ -264,7 +264,7 @@ const App = {
     this.showScreen('loading');
 
     const loadingTexts = [
-      '오늘의 운세를 불러오는 중...',
+      '오늘 운세를 불러오는 중...',
       '별자리를 분석하는 중...',
       '운명의 흐름을 읽는 중...',
       '행운의 기운을 계산하는 중...',
@@ -468,7 +468,7 @@ const App = {
       // Web Share API 시도
       if (navigator.share) {
         await navigator.share({
-          title: '오늘의 운세',
+          title: '오늘 운세',
           text: shareText,
           url: window.location.origin
         });

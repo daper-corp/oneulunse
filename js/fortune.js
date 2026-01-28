@@ -1,5 +1,5 @@
 /**
- * 오늘의 운세 - 운세 생성 로직
+ * 오늘 운세 - 운세 생성 로직
  *
  * 핵심 원칙:
  * - 같은 사람 + 같은 날 = 항상 같은 결과
@@ -178,7 +178,7 @@ const Fortune = {
     const scoreText = fortune.overall.score >= 80 ? '대박' :
                       fortune.overall.score >= 60 ? '좋은' : '평범한';
 
-    return `🔮 오늘의 운세 결과!\n\n` +
+    return `🔮 오늘 운세 결과!\n\n` +
            `${fortune.name}님의 오늘 운세는 ${scoreText} 운세! ${fortune.overall.emoji}\n` +
            `총운 ${fortune.overall.score}점\n\n` +
            `💰 금전운: ${fortune.money.title}\n` +

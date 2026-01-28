@@ -72,7 +72,7 @@
           font-size="120"
           font-weight="bold"
           fill="#FFFFFF"
-          text-anchor="middle">오늘의 운세</text>
+          text-anchor="middle">오늘 운세</text>
 
     <!-- Subtitle -->
     <text x="700" y="380"
