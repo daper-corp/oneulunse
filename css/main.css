@@ -766,36 +766,177 @@ body {
 /* 다크모드 지원 (선택사항) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111827;
-    --card-bg: #1F2937;
-    --text-primary: #F9FAFB;
-    --text-secondary: #9CA3AF;
-    --text-light: #6B7280;
-    --border: #374151;
+    --background: #0F172A;
+    --card-bg: #1E293B;
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-light: #94A3B8;
+    --border: #334155;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   }
 
+  body {
+    background: var(--background);
+  }
+
+  #app {
+    background: var(--background);
+  }
+
+  /* 입력 필드 */
+  .input-field {
+    background: var(--card-bg);
+    border-color: var(--border);
+    color: var(--text-primary);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-light);
+  }
+
+  .input-field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+  }
+
+  /* 버튼 */
+  .submit-btn {
+    box-shadow: 0 4px 14px rgba(147, 51, 234, 0.4);
+  }
+
+  .retry-btn {
+    background: var(--card-bg);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .retry-btn:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* 결과 헤더 */
   .result-header {
     background: var(--background);
   }
 
+  /* 운세 카드 */
+  .fortune-card {
+    background: var(--card-bg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-title {
+    color: var(--text-primary);
+  }
+
+  .fortune-title {
+    color: #A78BFA;
+  }
+
+  .fortune-content {
+    color: var(--text-secondary);
+  }
+
+  /* 점수 원 */
+  .score-circle {
+    box-shadow: 0 4px 14px rgba(147, 51, 234, 0.5);
+  }
+
+  /* 행운 그리드 */
+  .lucky-item {
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lucky-label {
+    color: var(--text-light);
+  }
+
+  .lucky-value {
+    color: var(--text-primary);
+  }
+
+  /* 한마디 카드 */
   .card-advice {
-    background: linear-gradient(135deg, #78350F 0%, #92400E 100%);
+    background: linear-gradient(135deg, #713F12 0%, #A16207 100%);
   }
 
   .advice-content {
     color: #FEF3C7;
   }
 
+  /* 주의사항 카드 */
   .card-caution {
-    background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%);
+    background: linear-gradient(135deg, #7F1D1D 0%, #B91C1C 100%);
   }
 
   .caution-content {
     color: #FEE2E2;
   }
 
+  /* 공유 버튼 */
+  .share-section {
+    color: var(--text-secondary);
+  }
+
+  .share-title {
+    color: var(--text-secondary);
+  }
+
+  .share-url {
+    background: #475569;
+  }
+
+  /* 스트릭 배지 */
+  .streak-badge {
+    box-shadow: var(--shadow-md);
+  }
+
+  /* 방문자 카운터 */
+  .visitor-counter {
+    color: var(--text-secondary);
+  }
+
+  /* 로딩 화면 */
+  #screen-loading {
+    background: linear-gradient(180deg, var(--background) 0%, #1E1B4B 100%);
+  }
+
+  .loading-text {
+    color: var(--text-secondary);
+  }
+
+  .progress-bar {
+    background: var(--border);
+  }
+
+  /* 토스트 */
+  .toast {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 광고 플레이스홀더 */
   .ad-placeholder {
-    background: linear-gradient(135deg, #374151 0%, #4B5563 100%);
+    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    color: var(--text-light);
+  }
+
+  /* 로고 타이틀 그라데이션 유지 */
+  .title {
+    background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* 서브타이틀 */
+  .subtitle {
+    color: var(--text-secondary);
   }
 }
 
