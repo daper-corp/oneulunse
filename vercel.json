@@ -71,5 +71,15 @@
       "source": "/((?!api|_next|assets|css|js|favicon|manifest|sw|robots|sitemap).*)",
       "destination": "/index.html"
     }
+  ],
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html",
+      "status": 200
+    }
   ]
 }
