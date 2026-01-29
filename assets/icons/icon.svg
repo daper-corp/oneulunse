@@ -17,8 +17,8 @@
     </filter>
   </defs>
 
-  <!-- Background with rounded corners -->
-  <rect width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <!-- Background (full square) -->
+  <rect width="512" height="512" fill="url(#bgGrad)"/>
 
   <!-- Decorative stars -->
   <g fill="#FFF" opacity="0.3">
@@ -33,36 +33,28 @@
   <!-- Main crystal ball / fortune orb -->
   <g filter="url(#glow)">
     <!-- Outer glow circle -->
-    <circle cx="256" cy="230" r="120" fill="#FFF" opacity="0.15"/>
+    <circle cx="256" cy="256" r="120" fill="#FFF" opacity="0.15"/>
 
     <!-- Main orb -->
-    <circle cx="256" cy="230" r="95" fill="url(#sunGrad)"/>
+    <circle cx="256" cy="256" r="95" fill="url(#sunGrad)"/>
 
     <!-- Orb highlight -->
-    <ellipse cx="230" cy="200" rx="35" ry="25" fill="#FFF" opacity="0.5"/>
+    <ellipse cx="230" cy="226" rx="35" ry="25" fill="#FFF" opacity="0.5"/>
 
     <!-- Inner sparkle -->
-    <circle cx="280" cy="250" r="8" fill="#FFF" opacity="0.4"/>
+    <circle cx="280" cy="276" r="8" fill="#FFF" opacity="0.4"/>
   </g>
 
   <!-- Sun rays around the orb -->
   <g stroke="#FCD34D" stroke-width="6" stroke-linecap="round" opacity="0.9">
-    <line x1="256" y1="100" x2="256" y2="70"/>
-    <line x1="256" y1="360" x2="256" y2="390"/>
-    <line x1="120" y1="230" x2="90" y2="230"/>
-    <line x1="392" y1="230" x2="422" y2="230"/>
-    <line x1="156" y1="130" x2="135" y2="109"/>
-    <line x1="356" y1="130" x2="377" y2="109"/>
-    <line x1="156" y1="330" x2="135" y2="351"/>
-    <line x1="356" y1="330" x2="377" y2="351"/>
+    <line x1="256" y1="126" x2="256" y2="96"/>
+    <line x1="256" y1="386" x2="256" y2="416"/>
+    <line x1="120" y1="256" x2="90" y2="256"/>
+    <line x1="392" y1="256" x2="422" y2="256"/>
+    <line x1="156" y1="156" x2="135" y2="135"/>
+    <line x1="356" y1="156" x2="377" y2="135"/>
+    <line x1="156" y1="356" x2="135" y2="377"/>
+    <line x1="356" y1="356" x2="377" y2="377"/>
   </g>
 
-  <!-- Text "운세" -->
-  <text x="256" y="460"
-        font-family="Arial, 'Noto Sans KR', sans-serif"
-        font-size="80"
-        font-weight="bold"
-        fill="#FFFFFF"
-        text-anchor="middle"
-        filter="url(#glow)">운세</text>
 </svg>
