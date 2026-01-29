@@ -68,7 +68,7 @@
   ],
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/((?!css|js|assets|favicon|manifest|sw|robots|sitemap).*)",
       "destination": "/index.html"
     }
   ]
