@@ -1,10 +1,8 @@
-# 오늘의 운세 - robots.txt
+# 오늘 운세 - robots.txt
 # https://oneulunse.com
 
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /_next/
 
 # Sitemaps
 Sitemap: https://oneulunse.com/sitemap.xml
