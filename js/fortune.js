@@ -175,18 +175,32 @@ const Fortune = {
    * @returns {string} - 공유 텍스트
    */
   generateShareText(fortune) {
-    const scoreText = fortune.overall.score >= 80 ? '대박' :
-                      fortune.overall.score >= 60 ? '좋은' : '평범한';
+    // 점수에 따른 호기심 자극 문구
+    let hookEmoji, hookText;
+    if (fortune.overall.score >= 90) {
+      hookEmoji = '🔥';
+      hookText = '대박 운세!';
+    } else if (fortune.overall.score >= 80) {
+      hookEmoji = '✨';
+      hookText = '좋은 운세!';
+    } else if (fortune.overall.score >= 70) {
+      hookEmoji = '🌟';
+      hookText = '괜찮은 운세!';
+    } else if (fortune.overall.score >= 60) {
+      hookEmoji = '🙂';
+      hookText = '나쁘지 않은 운세!';
+    } else {
+      hookEmoji = '🤔';
+      hookText = '조심해야 할 운세...';
+    }
 
-    return `🔮 오늘 운세 결과!\n\n` +
-           `${fortune.name}님의 오늘 운세는 ${scoreText} 운세! ${fortune.overall.emoji}\n` +
-           `총운 ${fortune.overall.score}점\n\n` +
-           `💰 금전운: ${fortune.money.title}\n` +
-           `❤️ 연애운: ${fortune.love.title}\n` +
-           `🎨 행운의 색: ${fortune.luckyColor.name}\n` +
+    return `🔮 오늘 운세 ${fortune.overall.score}점 ${hookEmoji}\n` +
+           `${hookText}\n\n` +
+           `💰 ${fortune.money.title}\n` +
+           `❤️ ${fortune.love.title}\n` +
            `🔢 행운의 번호: ${fortune.luckyNumbers.join(', ')}\n\n` +
            `💬 "${fortune.advice}"\n\n` +
-           `나도 확인해보기 👉`;
+           `내 운세도 확인해보기 👇`;
   }
 };
 

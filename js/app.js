@@ -1,5 +1,6 @@
 /**
  * 오늘 운세 - 메인 앱 로직
+ * Mystic Dark Glassmorphism Version
  */
 
 const App = {
@@ -9,7 +10,8 @@ const App = {
     fortune: null,
     streak: 0,
     visitCount: 0,
-    isSharedView: false
+    isSharedView: false,
+    isDetailOpen: false
   },
 
   // DOM 요소 캐시
@@ -112,30 +114,40 @@ const App = {
       loadingText: document.getElementById('loading-text'),
       progressFill: document.getElementById('progress-fill'),
 
-      // 결과
+      // 결과 - 기본 정보
       resultName: document.getElementById('result-name'),
       resultDate: document.getElementById('result-date'),
+
+      // 점수 오브
       overallScore: document.getElementById('overall-score'),
       overallEmoji: document.getElementById('overall-emoji'),
       overallTitle: document.getElementById('overall-title'),
-      overallContent: document.getElementById('overall-content'),
+
+      // 미니 운세 행
       moneyEmoji: document.getElementById('money-emoji'),
       moneyTitle: document.getElementById('money-title'),
-      moneyContent: document.getElementById('money-content'),
       loveEmoji: document.getElementById('love-emoji'),
       loveTitle: document.getElementById('love-title'),
-      loveContent: document.getElementById('love-content'),
+
+      // 행운 요소 칩
       luckyTime: document.getElementById('lucky-time'),
       luckyColor: document.getElementById('lucky-color'),
       luckyColorDot: document.getElementById('lucky-color-dot'),
       luckyNumbers: document.getElementById('lucky-numbers'),
-      luckySnack: document.getElementById('lucky-snack'),
+
+      // 한마디
       adviceContent: document.getElementById('advice-content'),
+
+      // 상세 섹션
+      detailSection: document.getElementById('detail-section'),
+      detailToggle: document.getElementById('detail-toggle'),
+      overallContent: document.getElementById('overall-content'),
+      moneyContent: document.getElementById('money-content'),
+      loveContent: document.getElementById('love-content'),
       cautionContent: document.getElementById('caution-content'),
 
       // 공유 & 기타
       shareKakao: document.getElementById('share-kakao'),
-      shareInstagram: document.getElementById('share-instagram'),
       shareX: document.getElementById('share-x'),
       shareUrl: document.getElementById('share-url'),
       retryBtn: document.getElementById('retry-btn'),
@@ -152,37 +164,80 @@ const App = {
    */
   bindEvents() {
     // 폼 제출
-    this.elements.fortuneForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      this.handleSubmit();
-    });
+    if (this.elements.fortuneForm) {
+      this.elements.fortuneForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.handleSubmit();
+      });
+    }
+
+    // 입력 필드 에러 초기화 (먼저 바인딩 - 핵심 기능)
+    if (this.elements.nameInput) {
+      this.elements.nameInput.addEventListener('input', () => {
+        this.elements.nameInput.classList.remove('error');
+        if (this.elements.nameError) this.elements.nameError.textContent = '';
+      });
+    }
+
+    // 생년월일 자동 포맷팅 (YYYY-MM-DD) - 핵심 기능
+    if (this.elements.birthInput) {
+      this.elements.birthInput.addEventListener('input', (e) => {
+        this.elements.birthInput.classList.remove('error');
+        if (this.elements.birthError) this.elements.birthError.textContent = '';
+        this.formatBirthInput(e);
+      });
+
+      // 생년월일 붙여넣기 처리
+      this.elements.birthInput.addEventListener('paste', (e) => {
+        setTimeout(() => this.formatBirthInput({ target: this.elements.birthInput }), 0);
+      });
+    }
 
     // 공유 버튼
-    this.elements.shareKakao.addEventListener('click', () => this.shareKakao());
-    this.elements.shareInstagram.addEventListener('click', () => this.shareInstagram());
-    this.elements.shareX.addEventListener('click', () => this.shareX());
-    this.elements.shareUrl.addEventListener('click', () => this.shareUrl());
+    if (this.elements.shareKakao) {
+      this.elements.shareKakao.addEventListener('click', () => this.shareKakao());
+    }
+    if (this.elements.shareX) {
+      this.elements.shareX.addEventListener('click', () => this.shareX());
+    }
+    if (this.elements.shareUrl) {
+      this.elements.shareUrl.addEventListener('click', () => this.shareUrl());
+    }
+
+    // 상세 토글
+    if (this.elements.detailToggle) {
+      this.elements.detailToggle.addEventListener('click', () => this.toggleDetailSection());
+    }
 
     // 다시보기
-    this.elements.retryBtn.addEventListener('click', () => this.goToMain());
+    if (this.elements.retryBtn) {
+      this.elements.retryBtn.addEventListener('click', () => this.goToMain());
+    }
+  },
 
-    // 입력 필드 에러 초기화
-    this.elements.nameInput.addEventListener('input', () => {
-      this.elements.nameInput.classList.remove('error');
-      this.elements.nameError.textContent = '';
-    });
+  /**
+   * 상세 섹션 토글
+   */
+  toggleDetailSection() {
+    this.state.isDetailOpen = !this.state.isDetailOpen;
+    const detailSection = this.elements.detailSection;
+    const toggleBtn = this.elements.detailToggle;
+    const icon = toggleBtn.querySelector('svg');
 
-    // 생년월일 자동 포맷팅 (YYYY-MM-DD)
-    this.elements.birthInput.addEventListener('input', (e) => {
-      this.elements.birthInput.classList.remove('error');
-      this.elements.birthError.textContent = '';
-      this.formatBirthInput(e);
-    });
+    if (this.state.isDetailOpen) {
+      detailSection.classList.add('active');
+      icon.style.transform = 'rotate(180deg)';
+      toggleBtn.querySelector('span:last-child').textContent = '접기';
 
-    // 생년월일 붙여넣기 처리
-    this.elements.birthInput.addEventListener('paste', (e) => {
-      setTimeout(() => this.formatBirthInput({ target: this.elements.birthInput }), 0);
-    });
+      // 상세 섹션으로 스크롤
+      setTimeout(() => {
+        detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } else {
+      detailSection.classList.remove('active');
+      icon.style.transform = 'rotate(0deg)';
+      toggleBtn.querySelector('span:last-child').textContent = '상세';
+    }
   },
 
   /**
@@ -403,6 +458,19 @@ const App = {
    */
   goToMain() {
     this.state.isSharedView = false;
+    this.state.isDetailOpen = false;
+
+    // 상세 섹션 초기화
+    if (this.elements.detailSection) {
+      this.elements.detailSection.classList.remove('active');
+    }
+    if (this.elements.detailToggle) {
+      const icon = this.elements.detailToggle.querySelector('svg');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+      const label = this.elements.detailToggle.querySelector('span:last-child');
+      if (label) label.textContent = '상세';
+    }
+
     window.history.pushState({}, '', '/');
     this.showScreen('main');
   },
@@ -454,34 +522,39 @@ const App = {
     const fortune = this.state.fortune;
     if (!fortune) return;
 
+    // 상세 섹션 초기화
+    this.state.isDetailOpen = false;
+    if (this.elements.detailSection) {
+      this.elements.detailSection.classList.remove('active');
+    }
+
     // 결과 데이터 채우기
     this.elements.resultName.textContent = fortune.name;
     this.elements.resultDate.textContent = fortune.date;
 
-    // 총운
+    // 점수 오브
     this.elements.overallEmoji.textContent = fortune.overall.emoji;
     this.elements.overallTitle.textContent = fortune.overall.title;
-    this.elements.overallContent.textContent = fortune.overall.content;
 
-    // 금전운
+    // 미니 운세 행
     this.elements.moneyEmoji.textContent = fortune.money.emoji;
     this.elements.moneyTitle.textContent = fortune.money.title;
-    this.elements.moneyContent.textContent = fortune.money.content;
-
-    // 연애운
     this.elements.loveEmoji.textContent = fortune.love.emoji;
     this.elements.loveTitle.textContent = fortune.love.title;
-    this.elements.loveContent.textContent = fortune.love.content;
 
-    // 행운 요소
+    // 행운 요소 칩
     this.elements.luckyTime.textContent = fortune.luckyTime.display;
     this.elements.luckyColor.textContent = fortune.luckyColor.name;
     this.elements.luckyColorDot.style.backgroundColor = fortune.luckyColor.hex;
     this.elements.luckyNumbers.textContent = fortune.luckyNumbers.join(', ');
-    this.elements.luckySnack.textContent = fortune.luckySnack;
 
-    // 한마디 & 주의사항
-    this.elements.adviceContent.textContent = fortune.advice;
+    // 한마디
+    this.elements.adviceContent.textContent = `"${fortune.advice}"`;
+
+    // 상세 섹션 내용
+    this.elements.overallContent.textContent = fortune.overall.content;
+    this.elements.moneyContent.textContent = fortune.money.content;
+    this.elements.loveContent.textContent = fortune.love.content;
     this.elements.cautionContent.textContent = fortune.caution;
 
     // 화면 전환
@@ -535,15 +608,15 @@ const App = {
       if (streak >= 30) {
         icon = '💎';
         text = `${streak}일 연속 확인! 다이아몬드 등급!`;
-        gradient = 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)';
+        gradient = 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(96, 165, 250, 0.15) 100%)';
       } else if (streak >= 7) {
         icon = '⭐';
         text = `${streak}일 연속 확인! 골드 등급!`;
-        gradient = 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)';
+        gradient = 'linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(251, 191, 36, 0.15) 100%)';
       } else {
         icon = '🔥';
         text = `${streak}일 연속 확인 중!`;
-        gradient = 'linear-gradient(135deg, #F97316 0%, #FB923C 100%)';
+        gradient = 'linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(251, 146, 60, 0.15) 100%)';
       }
 
       this.elements.streakIcon.textContent = icon;
@@ -616,41 +689,6 @@ const App = {
   },
 
   /**
-   * 인스타그램 공유 (스토리)
-   */
-  async shareInstagram() {
-    const fortune = this.state.fortune;
-    if (!fortune) return;
-
-    const shareUrl = window.location.href;
-    const shareText = Fortune.generateShareText(fortune);
-    const fullText = shareText + ' ' + shareUrl;
-
-    // 클립보드에 텍스트 복사 후 인스타그램 앱으로 이동
-    try {
-      await navigator.clipboard.writeText(fullText);
-      this.showToast('텍스트가 복사되었습니다! 인스타그램에서 붙여넣기 하세요.');
-
-      // 인스타그램 앱 열기 시도
-      setTimeout(() => {
-        window.open('https://www.instagram.com/', '_blank');
-      }, 1000);
-    } catch (err) {
-      // 폴백
-      const textarea = document.createElement('textarea');
-      textarea.value = fullText;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      this.showToast('텍스트가 복사되었습니다! 인스타그램에서 붙여넣기 하세요.');
-      setTimeout(() => {
-        window.open('https://www.instagram.com/', '_blank');
-      }, 1000);
-    }
-  },
-
-  /**
    * X (Twitter) 공유
    */
   shareX() {
@@ -658,14 +696,31 @@ const App = {
     if (!fortune) return;
 
     const shareUrl = window.location.href;
-    const scoreText = fortune.overall.score >= 80 ? '대박' :
-                      fortune.overall.score >= 60 ? '좋은' : '평범한';
 
-    const tweetText = `🔮 오늘 운세 결과!\n\n` +
-                      `${fortune.name}님: ${scoreText} 운세! ${fortune.overall.emoji}\n` +
-                      `총운 ${fortune.overall.score}점\n\n` +
-                      `💬 "${fortune.advice}"\n\n` +
-                      `결과 보기 👉`;
+    // 점수에 따른 호기심 자극 문구
+    let hookText, emoji;
+    if (fortune.overall.score >= 90) {
+      hookText = '대박 운세가 나왔어요';
+      emoji = '🔥';
+    } else if (fortune.overall.score >= 80) {
+      hookText = '오늘 운 좋을 듯';
+      emoji = '✨';
+    } else if (fortune.overall.score >= 70) {
+      hookText = '괜찮은 하루가 될 것 같아요';
+      emoji = '🌟';
+    } else if (fortune.overall.score >= 60) {
+      hookText = '평범하지만 나쁘지 않은 운세';
+      emoji = '🙂';
+    } else {
+      hookText = '오늘은 조심해야 할 듯';
+      emoji = '🤔';
+    }
+
+    // 짧고 임팩트 있는 트윗 텍스트
+    const tweetText = `🔮 ${fortune.overall.score}점! ${hookText} ${emoji}\n\n` +
+                      `행운의 번호: ${fortune.luckyNumbers.join(', ')}\n` +
+                      `"${fortune.advice}"\n\n` +
+                      `내 운세도 확인해보기 👇`;
 
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
 

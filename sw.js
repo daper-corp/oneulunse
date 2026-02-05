@@ -3,7 +3,7 @@
  * 오프라인 지원 및 캐싱
  */
 
-const CACHE_NAME = 'oneulunse-v1';
+const CACHE_NAME = 'oneulunse-v3';
 const CACHE_URLS = [
   '/',
   '/index.html',
@@ -59,11 +59,29 @@ self.addEventListener('activate', (event) => {
 
 // Fetch 이벤트 (네트워크 우선, 캐시 폴백)
 self.addEventListener('fetch', (event) => {
-  // HTML 요청은 네트워크 우선
+  const url = new URL(event.request.url);
+
+  // http/https가 아닌 요청은 무시 (chrome-extension 등)
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
+
+  // 외부 도메인 요청은 네트워크만 사용
+  if (url.origin !== location.origin) {
+    return;
+  }
+
+  // HTML 요청 (네비게이션) - SPA 라우팅 지원
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
+          // 404 응답이면 index.html 반환 (SPA 라우팅)
+          if (response.status === 404) {
+            return caches.match('/index.html').then((cachedIndex) => {
+              return cachedIndex || response;
+            });
+          }
           // 성공하면 캐시 업데이트
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -72,45 +90,34 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // 실패하면 캐시에서 제공
-          return caches.match(event.request).then((cachedResponse) => {
-            return cachedResponse || caches.match('/');
+          // 네트워크 실패시 캐시된 index.html 반환 (SPA)
+          return caches.match('/index.html').then((cachedIndex) => {
+            return cachedIndex || caches.match('/');
           });
         })
     );
     return;
   }
 
-  // 정적 자산은 캐시 우선
+  // 정적 자산은 네트워크 우선으로 변경 (최신 파일 우선)
   event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          // 캐시가 있으면 반환하고 백그라운드에서 업데이트
-          fetch(event.request).then((networkResponse) => {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, networkResponse);
-            });
-          }).catch(() => {});
-
-          return cachedResponse;
+    fetch(event.request)
+      .then((response) => {
+        // 유효한 응답만 캐시
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
         }
 
-        // 캐시가 없으면 네트워크 요청
-        return fetch(event.request)
-          .then((response) => {
-            // 유효한 응답만 캐시
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
 
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
-            });
-
-            return response;
-          });
+        return response;
+      })
+      .catch(() => {
+        // 네트워크 실패시 캐시 사용
+        return caches.match(event.request);
       })
   );
 });

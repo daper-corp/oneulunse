@@ -1,36 +1,56 @@
 /* ========================================
-   오늘의 운세 - 메인 스타일시트
+   오늘의 운세 - Mystic Dark Glassmorphism
+   프리미엄 다크 테마 스타일시트
    ======================================== */
 
-/* CSS Variables */
+/* CSS Variables - Dark Theme */
 :root {
-  --primary: #9333EA;
-  --primary-dark: #7C3AED;
+  /* Primary Colors */
+  --primary: #A855F7;
+  --primary-light: #C084FC;
+  --primary-dark: #9333EA;
   --secondary: #EC4899;
-  --accent: #F59E0B;
-  --background: #F9FAFB;
-  --card-bg: #FFFFFF;
-  --text-primary: #1F2937;
-  --text-secondary: #6B7280;
-  --text-light: #9CA3AF;
-  --border: #E5E7EB;
-  --error: #EF4444;
-  --success: #10B981;
+  --accent-gold: #F59E0B;
+  --accent-gold-light: #FBBF24;
 
+  /* Background Colors */
+  --bg-deep: #0A0A0F;
+  --bg-dark: #0F0F1A;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.06);
+
+  /* Text Colors */
+  --text-primary: #F8FAFC;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --text-gold: #FCD34D;
+
+  /* Border & Glow */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-hover: rgba(255, 255, 255, 0.15);
+  --glow-primary: rgba(168, 85, 247, 0.4);
+  --glow-secondary: rgba(236, 72, 153, 0.3);
+  --glow-gold: rgba(245, 158, 11, 0.4);
+
+  /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   --gradient-gold: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
-  --gradient-blue: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+  --gradient-orb: radial-gradient(circle at 30% 30%, var(--primary-light) 0%, var(--primary-dark) 50%, #581C87 100%);
+  --gradient-bg: linear-gradient(180deg, #0A0A0F 0%, #1A1025 50%, #0F0F1A 100%);
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-primary: 0 4px 14px rgba(147, 51, 234, 0.3);
+  /* Shadows */
+  --shadow-glow: 0 0 40px var(--glow-primary), 0 0 80px var(--glow-secondary);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-button: 0 4px 20px var(--glow-primary);
 
+  /* Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-full: 9999px;
 
+  /* Font */
   --font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -49,7 +69,7 @@ html {
 
 body {
   font-family: var(--font-family);
-  background: var(--background);
+  background: var(--gradient-bg);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
@@ -58,12 +78,63 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Starfield Background */
+.stars-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.stars-bg::before,
+.stars-bg::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.stars-bg::before {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 70%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 80%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 25% 50%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.6) 0%, transparent 100%);
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.stars-bg::after {
+  background-image:
+    radial-gradient(1px 1px at 5% 35%, rgba(168,85,247,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 55%, rgba(236,72,153,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 25%, rgba(168,85,247,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 75%, rgba(236,72,153,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 95%, rgba(168,85,247,0.6) 0%, transparent 100%);
+  animation: twinkle 3s ease-in-out infinite 1s;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
 /* App Container */
 #app {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background: var(--background);
+  position: relative;
+  z-index: 1;
 }
 
 /* Screen Base */
@@ -76,6 +147,24 @@ body {
 .screen.active {
   display: flex;
   flex-direction: column;
+}
+
+/* ========================================
+   Glassmorphism 공통 스타일
+   ======================================== */
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glass-hover);
 }
 
 /* ========================================
@@ -97,21 +186,70 @@ body {
   padding: 24px 0;
 }
 
-/* 로고 섹션 */
+/* 로고 섹션 with Orb */
 .logo-section {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.logo-orb {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: var(--gradient-orb);
+  box-shadow: var(--shadow-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breathe 4s ease-in-out infinite, float 6s ease-in-out infinite;
+  position: relative;
+}
+
+.logo-orb::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), transparent, var(--secondary));
+  opacity: 0.5;
+  animation: rotate 8s linear infinite;
+}
+
+.logo-orb::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  top: 15%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .logo-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  animation: float 3s ease-in-out infinite;
+  font-size: 48px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); box-shadow: var(--shadow-glow); }
+  50% { transform: scale(1.05); box-shadow: 0 0 60px var(--glow-primary), 0 0 100px var(--glow-secondary); }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-8px) scale(1.02); }
+  50% { transform: translateY(0) scale(1.05); }
+  75% { transform: translateY(-4px) scale(1.02); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .title {
@@ -122,6 +260,7 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 8px;
+  text-shadow: 0 0 40px var(--glow-primary);
 }
 
 .subtitle {
@@ -129,7 +268,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* 입력 섹션 */
+/* 입력 섹션 - Glassmorphism */
 .input-section {
   width: 100%;
   max-width: 320px;
@@ -149,30 +288,31 @@ body {
 
 .input-field {
   width: 100%;
-  padding: 16px;
+  padding: 16px 20px;
   font-size: 16px;
   font-family: var(--font-family);
-  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
-  background: var(--card-bg);
   color: var(--text-primary);
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
 }
 
 .input-field:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
-  transform: scale(1.02);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2), 0 0 20px rgba(168, 85, 247, 0.1);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .input-field::placeholder {
-  color: var(--text-light);
+  color: var(--text-muted);
 }
 
 .input-field.error {
-  border-color: var(--error);
+  border-color: #EF4444;
   animation: shake 0.4s ease;
 }
 
@@ -186,12 +326,12 @@ body {
 .input-error {
   display: block;
   font-size: 12px;
-  color: var(--error);
+  color: #F87171;
   margin-top: 6px;
   min-height: 18px;
 }
 
-/* 제출 버튼 */
+/* 제출 버튼 with Shimmer */
 .submit-btn {
   width: 100%;
   padding: 18px 24px;
@@ -207,14 +347,32 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: var(--shadow-primary);
-  transition: all 0.2s ease;
+  box-shadow: var(--shadow-button);
+  transition: all 0.3s ease;
   margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4);
+  box-shadow: 0 8px 30px var(--glow-primary);
 }
 
 .submit-btn:active {
@@ -229,7 +387,7 @@ body {
 .visitor-counter {
   margin-top: 32px;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -245,13 +403,13 @@ body {
 }
 
 /* ========================================
-   로딩 화면
+   로딩 화면 - Crystal Ball
    ======================================== */
 
 #screen-loading {
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg, var(--background) 0%, #F3E8FF 100%);
+  background: transparent;
 }
 
 .loading-content {
@@ -259,24 +417,103 @@ body {
   z-index: 1;
 }
 
-.loading-icon {
-  font-size: 80px;
-  margin-bottom: 24px;
-  animation: spin 2s linear infinite, glow 1.5s ease-in-out infinite;
+/* Crystal Ball Orb */
+.crystal-ball {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 32px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes spin {
+.crystal-ball-inner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--gradient-orb);
+  box-shadow: var(--shadow-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.crystal-ball-inner::after {
+  content: '';
+  position: absolute;
+  width: 35%;
+  height: 35%;
+  top: 12%;
+  left: 18%;
+  background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.loading-icon {
+  font-size: 40px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+  animation: glow 1.5s ease-in-out infinite;
+}
+
+/* Orbit Particles */
+.orbit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: orbit-rotate 3s linear infinite;
+}
+
+.orbit:nth-child(2) {
+  animation-duration: 2.5s;
+  animation-direction: reverse;
+}
+
+.orbit:nth-child(3) {
+  animation-duration: 4s;
+}
+
+.orbit-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--glow-primary);
+}
+
+.orbit:nth-child(1) .orbit-particle { top: 0; left: 50%; transform: translateX(-50%); }
+.orbit:nth-child(2) .orbit-particle { bottom: 10%; right: 10%; background: var(--secondary); box-shadow: 0 0 10px var(--glow-secondary); }
+.orbit:nth-child(3) .orbit-particle { top: 30%; left: 0; background: var(--accent-gold); box-shadow: 0 0 10px var(--glow-gold); }
+
+@keyframes orbit-rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 40px var(--glow-primary), 0 0 80px var(--glow-secondary);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 60px var(--glow-primary), 0 0 120px var(--glow-secondary);
+    transform: scale(1.05);
+  }
+}
+
 @keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(147, 51, 234, 0.5)); }
-  50% { filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.8)); }
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+  50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.8)); }
 }
 
 .loading-text {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--text-secondary);
   margin-bottom: 24px;
   animation: fadeInOut 2s ease-in-out infinite;
@@ -289,9 +526,9 @@ body {
 
 .progress-bar {
   width: 200px;
-  height: 8px;
-  background: var(--border);
-  border-radius: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
   overflow: hidden;
   margin: 0 auto;
 }
@@ -300,26 +537,13 @@ body {
   height: 100%;
   width: 0%;
   background: var(--gradient-primary);
-  border-radius: 4px;
+  border-radius: var(--radius-full);
   transition: width 0.1s linear;
-}
-
-/* 전면 광고 */
-.interstitial-ad {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 320px;
-}
-
-.ad-interstitial {
-  height: 250px;
+  box-shadow: 0 0 10px var(--glow-primary);
 }
 
 /* ========================================
-   결과 화면
+   결과 화면 - Compact Layout
    ======================================== */
 
 #screen-result {
@@ -332,222 +556,270 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
+  height: 2px;
   width: 0%;
   background: var(--gradient-primary);
   z-index: 1000;
   transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--glow-primary);
 }
 
 /* 결과 헤더 */
 .result-header {
   text-align: center;
-  padding: 24px 0;
+  padding: 20px 0 16px;
   position: sticky;
   top: 0;
-  background: var(--background);
+  background: linear-gradient(180deg, var(--bg-deep) 0%, transparent 100%);
   z-index: 10;
 }
 
 .result-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .result-date {
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
 /* 결과 컨텐츠 */
 .result-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-/* 운세 카드 */
-.fortune-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-}
+/* ========================================
+   Score Orb - 점수 표시
+   ======================================== */
 
-.card-header {
+.score-orb-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
+  padding: 24px 16px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
 }
 
-.card-icon {
-  font-size: 24px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-/* 총운 스코어 */
-.score-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  margin-bottom: 20px;
-}
-
-.score-circle {
-  width: 100px;
-  height: 100px;
+.score-orb {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background: var(--gradient-primary);
+  background: var(--gradient-orb);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: var(--shadow-primary);
+  box-shadow: var(--shadow-glow);
+  animation: pulse-glow 3s ease-in-out infinite;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.score-orb::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), transparent 50%, var(--secondary));
+  opacity: 0.6;
+  z-index: -1;
+}
+
+.score-orb::after {
+  content: '';
+  position: absolute;
+  width: 35%;
+  height: 35%;
+  top: 12%;
+  left: 18%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  border-radius: 50%;
 }
 
 .score-value {
-  font-size: 36px;
+  font-size: 42px;
   font-weight: 700;
   line-height: 1;
+  text-shadow: 0 0 20px rgba(255,255,255,0.5);
 }
 
 .score-label {
   font-size: 14px;
   opacity: 0.9;
+  margin-top: 2px;
+}
+
+.score-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .score-emoji {
-  font-size: 48px;
-  animation: bounce 1s ease infinite;
+  font-size: 24px;
+  animation: bounce 2s ease-in-out infinite;
 }
 
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-4px); }
 }
 
-.fortune-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 8px;
-  text-align: center;
-}
+/* ========================================
+   Mini Fortune Row - 운세 미니 행
+   ======================================== */
 
-.fortune-content {
-  font-size: 15px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  text-align: center;
-}
-
-.fortune-emoji {
-  font-size: 40px;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-/* 행운 그리드 */
-.lucky-grid {
+.mini-fortune-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.lucky-item {
-  background: var(--card-bg);
-  border-radius: var(--radius-md);
-  padding: 20px 16px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease;
-}
-
-.lucky-item:hover {
-  transform: rotate(-2deg);
-}
-
-.lucky-icon {
-  display: block;
-  font-size: 28px;
-  margin-bottom: 8px;
-}
-
-.lucky-label {
-  display: block;
-  font-size: 12px;
-  color: var(--text-light);
-  margin-bottom: 6px;
-}
-
-.lucky-value {
+.mini-fortune-item {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.mini-fortune-item:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glass-hover);
+  transform: translateY(-2px);
+}
+
+.mini-fortune-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.mini-fortune-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mini-fortune-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mini-fortune-title {
   font-size: 14px;
   font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================
+   Lucky Chips - 행운 요소 칩
+   ======================================== */
+
+.lucky-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 16px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+}
+
+.lucky-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.lucky-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-glass-hover);
+}
+
+.lucky-chip-icon {
+  font-size: 14px;
+}
+
+.lucky-chip-value {
+  font-weight: 500;
   color: var(--text-primary);
 }
 
 .color-dot {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 8px currentColor;
 }
 
-/* 한마디 & 주의사항 카드 */
-.card-advice {
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+/* ========================================
+   Advice Card - 한마디
+   ======================================== */
+
+.advice-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(251, 191, 36, 0.1) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
 }
 
-.advice-content {
+.advice-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.advice-text {
   font-size: 16px;
   font-weight: 500;
-  color: #92400E;
-  text-align: center;
+  color: var(--text-gold);
   line-height: 1.6;
 }
 
-.card-caution {
-  background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
-}
+/* ========================================
+   Share Bar - 공유 버튼
+   ======================================== */
 
-.caution-content {
-  font-size: 15px;
-  color: #991B1B;
-  text-align: center;
-  line-height: 1.6;
-}
-
-/* 공유 섹션 */
-.share-section {
-  text-align: center;
-  padding: 24px 0;
-}
-
-.share-title {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-}
-
-.share-buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+.share-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -556,21 +828,40 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  width: 72px;
-  height: 72px;
+  gap: 6px;
+  padding: 16px 8px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   font-family: var(--font-family);
   color: white;
-  border: none;
-  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.share-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.share-btn:hover::before {
+  left: 100%;
 }
 
 .share-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .share-btn:active {
@@ -578,59 +869,236 @@ body {
 }
 
 .share-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
 }
 
-.share-kakao {
-  background: #FEE500;
-  color: #3C1E1E;
+.share-btn.kakao {
+  background: linear-gradient(135deg, rgba(254, 229, 0, 0.2) 0%, rgba(254, 229, 0, 0.1) 100%);
+  border-color: rgba(254, 229, 0, 0.4);
+  color: #FEE500;
 }
 
-.share-instagram {
-  background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%);
+.share-btn.kakao:hover {
+  background: linear-gradient(135deg, rgba(254, 229, 0, 0.3) 0%, rgba(254, 229, 0, 0.15) 100%);
+  box-shadow: 0 4px 20px rgba(254, 229, 0, 0.2);
 }
 
-.share-x {
-  background: #000000;
+.share-btn.x-twitter {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
 }
 
-.share-url {
-  background: #6B7280;
+.share-btn.x-twitter:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
 }
 
-/* 다시보기 버튼 */
-.retry-btn {
-  width: 100%;
-  padding: 16px;
-  font-size: 16px;
+.share-btn.copy {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: var(--primary-light);
+}
+
+.share-btn.copy:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(168, 85, 247, 0.15) 100%);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+
+/* ========================================
+   Action Bar - 액션 버튼
+   ======================================== */
+
+.action-bar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
   font-weight: 500;
   font-family: var(--font-family);
-  color: var(--primary);
-  background: white;
-  border: 2px solid var(--primary);
-  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.retry-btn:hover {
-  background: var(--primary);
-  color: white;
+.action-btn:hover {
+  transform: translateY(-2px);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
 }
 
-/* 스트릭 배지 */
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.action-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.action-btn.detail {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.action-btn.detail:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  color: var(--primary-light);
+}
+
+.action-btn.retry {
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.action-btn.retry:hover {
+  border-color: rgba(236, 72, 153, 0.5);
+  color: var(--secondary);
+}
+
+/* ========================================
+   Detail Section - 상세 정보 (펼침)
+   ======================================== */
+
+.detail-section {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+.detail-section.active {
+  display: flex;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fortune Card - 상세 운세 카드 */
+.fortune-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.card-icon {
+  font-size: 20px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.fortune-content {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Caution Card */
+.card-caution {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.caution-content {
+  font-size: 14px;
+  color: #FCA5A5;
+  line-height: 1.6;
+}
+
+/* ========================================
+   Ad Banner
+   ======================================== */
+
+.ad-banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* ========================================
+   Toast Message
+   ======================================== */
+
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 14px 28px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: var(--shadow-card);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ========================================
+   Streak Badge
+   ======================================== */
+
 .streak-badge {
   display: none;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 16px;
-  background: var(--gradient-gold);
-  border-radius: var(--radius-md);
-  color: white;
-  font-weight: 600;
-  margin-top: 16px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(251, 191, 36, 0.15) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-lg);
+  color: var(--text-gold);
+  font-weight: 500;
+  font-size: 14px;
   animation: streakPulse 2s ease-in-out infinite;
 }
 
@@ -644,7 +1112,7 @@ body {
 }
 
 .streak-icon {
-  font-size: 24px;
+  font-size: 20px;
   animation: fire 0.5s ease-in-out infinite alternate;
 }
 
@@ -654,56 +1122,7 @@ body {
 }
 
 /* ========================================
-   광고 배너
-   ======================================== */
-
-.ad-banner {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
-}
-
-.ad-placeholder {
-  width: 320px;
-  height: 100px;
-  background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-  font-size: 14px;
-}
-
-/* ========================================
-   토스트 메시지
-   ======================================== */
-
-.toast {
-  position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  padding: 14px 28px;
-  background: var(--text-primary);
-  color: white;
-  border-radius: var(--radius-xl);
-  font-size: 14px;
-  font-weight: 500;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 1000;
-  white-space: nowrap;
-}
-
-.toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-/* ========================================
-   애니메이션
+   Animations
    ======================================== */
 
 .animate-card {
@@ -725,12 +1144,10 @@ body {
 /* 순차 딜레이 */
 .animate-card:nth-child(1) { animation-delay: 0s; }
 .animate-card:nth-child(2) { animation-delay: 0.1s; }
-.animate-card:nth-child(3) { animation-delay: 0.2s; }
-.animate-card:nth-child(4) { animation-delay: 0.3s; }
-.animate-card:nth-child(5) { animation-delay: 0.4s; }
-.animate-card:nth-child(6) { animation-delay: 0.5s; }
-.animate-card:nth-child(7) { animation-delay: 0.6s; }
-.animate-card:nth-child(8) { animation-delay: 0.7s; }
+.animate-card:nth-child(3) { animation-delay: 0.15s; }
+.animate-card:nth-child(4) { animation-delay: 0.2s; }
+.animate-card:nth-child(5) { animation-delay: 0.25s; }
+.animate-card:nth-child(6) { animation-delay: 0.3s; }
 
 /* ========================================
    반응형 디자인
@@ -738,8 +1155,13 @@ body {
 
 /* 작은 화면 (iPhone SE 등) */
 @media (max-height: 700px) {
+  .logo-orb {
+    width: 100px;
+    height: 100px;
+  }
+
   .logo-icon {
-    font-size: 48px;
+    font-size: 40px;
   }
 
   .title {
@@ -747,205 +1169,43 @@ body {
   }
 
   .logo-section {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
   }
 
   .input-group {
     margin-bottom: 16px;
+  }
+
+  .score-orb {
+    width: 100px;
+    height: 100px;
+  }
+
+  .score-value {
+    font-size: 36px;
   }
 }
 
 /* 큰 화면 */
 @media (min-width: 480px) {
   #app {
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
+    border-left: 1px solid var(--border-glass);
+    border-right: 1px solid var(--border-glass);
   }
 }
 
-/* 다크모드 지원 (선택사항) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0F172A;
-    --card-bg: #1E293B;
-    --text-primary: #F8FAFC;
-    --text-secondary: #CBD5E1;
-    --text-light: #94A3B8;
-    --border: #334155;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-  }
-
-  body {
-    background: var(--background);
-  }
-
-  #app {
-    background: var(--background);
-  }
-
-  /* 입력 필드 */
-  .input-field {
-    background: var(--card-bg);
-    border-color: var(--border);
-    color: var(--text-primary);
-  }
-
-  .input-field::placeholder {
-    color: var(--text-light);
-  }
-
-  .input-field:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
-  }
-
-  /* 버튼 */
-  .submit-btn {
-    box-shadow: 0 4px 14px rgba(147, 51, 234, 0.4);
-  }
-
-  .retry-btn {
-    background: var(--card-bg);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-
-  .retry-btn:hover {
-    background: var(--primary);
-    color: white;
-  }
-
-  /* 결과 헤더 */
-  .result-header {
-    background: var(--background);
-  }
-
-  /* 운세 카드 */
-  .fortune-card {
-    background: var(--card-bg);
-    box-shadow: var(--shadow-md);
-  }
-
-  .card-title {
-    color: var(--text-primary);
-  }
-
-  .fortune-title {
-    color: #A78BFA;
-  }
-
-  .fortune-content {
-    color: var(--text-secondary);
-  }
-
-  /* 점수 원 */
-  .score-circle {
-    box-shadow: 0 4px 14px rgba(147, 51, 234, 0.5);
-  }
-
-  /* 행운 그리드 */
-  .lucky-item {
-    background: var(--card-bg);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .lucky-label {
-    color: var(--text-light);
-  }
-
-  .lucky-value {
-    color: var(--text-primary);
-  }
-
-  /* 한마디 카드 */
-  .card-advice {
-    background: linear-gradient(135deg, #713F12 0%, #A16207 100%);
-  }
-
-  .advice-content {
-    color: #FEF3C7;
-  }
-
-  /* 주의사항 카드 */
-  .card-caution {
-    background: linear-gradient(135deg, #7F1D1D 0%, #B91C1C 100%);
-  }
-
-  .caution-content {
-    color: #FEE2E2;
-  }
-
-  /* 공유 버튼 */
-  .share-section {
-    color: var(--text-secondary);
-  }
-
-  .share-title {
-    color: var(--text-secondary);
-  }
-
-  .share-url {
-    background: #475569;
-  }
-
-  /* 스트릭 배지 */
-  .streak-badge {
-    box-shadow: var(--shadow-md);
-  }
-
-  /* 방문자 카운터 */
-  .visitor-counter {
-    color: var(--text-secondary);
-  }
-
-  /* 로딩 화면 */
-  #screen-loading {
-    background: linear-gradient(180deg, var(--background) 0%, #1E1B4B 100%);
-  }
-
-  .loading-text {
-    color: var(--text-secondary);
-  }
-
-  .progress-bar {
-    background: var(--border);
-  }
-
-  /* 토스트 */
-  .toast {
-    background: var(--card-bg);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-lg);
-  }
-
-  /* 광고 플레이스홀더 */
-  .ad-placeholder {
-    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
-    color: var(--text-light);
-  }
-
-  /* 로고 타이틀 그라데이션 유지 */
-  .title {
-    background: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* 서브타이틀 */
-  .subtitle {
-    color: var(--text-secondary);
-  }
-}
-
-/* 접근성 */
+/* 접근성 - 모션 감소 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .stars-bg::before,
+  .stars-bg::after {
+    animation: none;
+    opacity: 0.8;
   }
 }
 

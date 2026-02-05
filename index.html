@@ -9,7 +9,7 @@
   <meta name="description" content="오늘 하루 어떨까요? 이름과 생년월일만 입력하면 금전운, 연애운, 행운의 번호까지 무료로 확인! 매일 자정에 업데이트되는 정확한 일일 운세 서비스.">
   <meta name="keywords" content="오늘 운세, 무료 운세, 일일 운세, 오늘의 운세, 금전운, 연애운, 행운의 번호, 로또 번호, 오늘 운세 보기, 생년월일 운세, 이름 운세, 무료 운세 사이트, 2026 운세, 매일 운세">
   <meta name="author" content="오늘 운세">
-  <meta name="theme-color" content="#9333EA">
+  <meta name="theme-color" content="#0A0A0F">
 
   <!-- Search Engine Control -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -137,6 +137,9 @@
   </script>
 </head>
 <body>
+  <!-- Starfield Background -->
+  <div class="stars-bg"></div>
+
   <div id="app">
     <!-- 화면 1: 메인 입력 화면 -->
     <section id="screen-main" class="screen active">
@@ -150,7 +153,9 @@
 
       <div class="main-content">
         <div class="logo-section">
-          <div class="logo-icon">&#9728;&#65039;</div>
+          <div class="logo-orb">
+            <span class="logo-icon">&#128302;</span>
+          </div>
           <h1 class="title">오늘 운세</h1>
           <p class="subtitle">오늘 하루 어떨까요?</p>
         </div>
@@ -209,17 +214,23 @@
     <!-- 화면 2: 로딩 화면 -->
     <section id="screen-loading" class="screen">
       <div class="loading-content">
-        <div class="loading-icon">&#128302;</div>
+        <!-- Crystal Ball with Orbiting Particles -->
+        <div class="crystal-ball">
+          <div class="orbit"><span class="orbit-particle"></span></div>
+          <div class="orbit"><span class="orbit-particle"></span></div>
+          <div class="orbit"><span class="orbit-particle"></span></div>
+          <div class="crystal-ball-inner">
+            <span class="loading-icon">&#128302;</span>
+          </div>
+        </div>
         <p class="loading-text" id="loading-text">오늘 운세를 불러오는 중...</p>
         <div class="progress-bar">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
       </div>
-
-      <!-- 로딩 중 광고 없음 -->
     </section>
 
-    <!-- 화면 3: 결과 화면 -->
+    <!-- 화면 3: 결과 화면 (Compact Layout) -->
     <section id="screen-result" class="screen">
       <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -229,24 +240,141 @@
       </header>
 
       <div class="result-content">
-        <!-- 총운 카드 -->
-        <div class="fortune-card card-overall animate-card">
-          <div class="card-header">
-            <span class="card-icon">&#128202;</span>
-            <h3 class="card-title">오늘의 총운</h3>
+        <!-- 1. 점수 오브 섹션 -->
+        <div class="score-orb-section animate-card">
+          <div class="score-orb">
+            <span class="score-value" id="overall-score">0</span>
+            <span class="score-label">점</span>
           </div>
-          <div class="score-section">
-            <div class="score-circle">
-              <span class="score-value" id="overall-score">0</span>
-              <span class="score-label">점</span>
-            </div>
-            <div class="score-emoji" id="overall-emoji"></div>
+          <div class="score-title">
+            <span id="overall-title"></span>
+            <span class="score-emoji" id="overall-emoji"></span>
           </div>
-          <h4 class="fortune-title" id="overall-title"></h4>
-          <p class="fortune-content" id="overall-content"></p>
         </div>
 
-        <!-- 광고 배너 #3: 결과 상단 -->
+        <!-- 2. 미니 운세 행 (금전/연애) -->
+        <div class="mini-fortune-row animate-card">
+          <div class="mini-fortune-item">
+            <span class="mini-fortune-icon" id="money-emoji"></span>
+            <div class="mini-fortune-info">
+              <span class="mini-fortune-label">금전운</span>
+              <span class="mini-fortune-title" id="money-title"></span>
+            </div>
+          </div>
+          <div class="mini-fortune-item">
+            <span class="mini-fortune-icon" id="love-emoji"></span>
+            <div class="mini-fortune-info">
+              <span class="mini-fortune-label">연애운</span>
+              <span class="mini-fortune-title" id="love-title"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 행운 요소 칩 -->
+        <div class="lucky-chips animate-card">
+          <div class="lucky-chip">
+            <span class="lucky-chip-icon">&#127912;</span>
+            <span class="color-dot" id="lucky-color-dot"></span>
+            <span class="lucky-chip-value" id="lucky-color"></span>
+          </div>
+          <div class="lucky-chip">
+            <span class="lucky-chip-icon">&#128290;</span>
+            <span class="lucky-chip-value" id="lucky-numbers"></span>
+          </div>
+          <div class="lucky-chip">
+            <span class="lucky-chip-icon">&#9200;</span>
+            <span class="lucky-chip-value" id="lucky-time"></span>
+          </div>
+        </div>
+
+        <!-- 4. 한마디 카드 -->
+        <div class="advice-card animate-card">
+          <div class="advice-icon">&#128172;</div>
+          <p class="advice-text" id="advice-content"></p>
+        </div>
+
+        <!-- 5. 공유 바 -->
+        <div class="share-bar animate-card">
+          <button class="share-btn kakao" id="share-kakao">
+            <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.765 1.834 5.182 4.584 6.527-.143.52-.548 1.99-.629 2.302-.098.379.14.373.294.272.12-.079 1.946-1.311 2.732-1.846.636.099 1.29.151 1.96.163h.117C16.476 18.109 22 14.637 22 10.69 22 6.463 17.523 3 12 3z"/>
+            </svg>
+            <span>카카오톡</span>
+          </button>
+          <button class="share-btn x-twitter" id="share-x">
+            <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            <span>X</span>
+          </button>
+          <button class="share-btn copy" id="share-url">
+            <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            <span>복사</span>
+          </button>
+        </div>
+
+        <!-- 6. 액션 바 -->
+        <div class="action-bar animate-card">
+          <button class="action-btn detail" id="detail-toggle">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            <span>상세보기</span>
+          </button>
+          <button class="action-btn retry" id="retry-btn">
+            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+              <path d="M3 21v-5h5"/>
+            </svg>
+            <span>다시보기</span>
+          </button>
+        </div>
+
+        <!-- 7. 상세 섹션 (기본 숨김) -->
+        <div class="detail-section" id="detail-section">
+          <!-- 총운 상세 -->
+          <div class="fortune-card">
+            <div class="card-header">
+              <span class="card-icon">&#128202;</span>
+              <h3 class="card-title">오늘의 총운</h3>
+            </div>
+            <p class="fortune-content" id="overall-content"></p>
+          </div>
+
+          <!-- 금전운 상세 -->
+          <div class="fortune-card">
+            <div class="card-header">
+              <span class="card-icon">&#128176;</span>
+              <h3 class="card-title">금전운</h3>
+            </div>
+            <p class="fortune-content" id="money-content"></p>
+          </div>
+
+          <!-- 연애운 상세 -->
+          <div class="fortune-card">
+            <div class="card-header">
+              <span class="card-icon">&#10084;&#65039;</span>
+              <h3 class="card-title">연애운</h3>
+            </div>
+            <p class="fortune-content" id="love-content"></p>
+          </div>
+
+          <!-- 주의사항 -->
+          <div class="fortune-card card-caution">
+            <div class="card-header">
+              <span class="card-icon">&#9888;&#65039;</span>
+              <h3 class="card-title">주의사항</h3>
+            </div>
+            <p class="caution-content" id="caution-content"></p>
+          </div>
+        </div>
+
+        <!-- 8. 광고 배너 (1개만) -->
         <div class="ad-banner ad-banner-result">
           <ins class="kakao_ad_area" style="display:none;"
                data-ad-unit="DAN-cL4myHgXwq9wxK2t"
@@ -254,127 +382,7 @@
                data-ad-height="100"></ins>
         </div>
 
-        <!-- 금전운 카드 -->
-        <div class="fortune-card card-money animate-card">
-          <div class="card-header">
-            <span class="card-icon">&#128176;</span>
-            <h3 class="card-title">금전운</h3>
-          </div>
-          <div class="fortune-emoji" id="money-emoji"></div>
-          <h4 class="fortune-title" id="money-title"></h4>
-          <p class="fortune-content" id="money-content"></p>
-        </div>
-
-        <!-- 연애운 카드 -->
-        <div class="fortune-card card-love animate-card">
-          <div class="card-header">
-            <span class="card-icon">&#10084;&#65039;</span>
-            <h3 class="card-title">연애운</h3>
-          </div>
-          <div class="fortune-emoji" id="love-emoji"></div>
-          <h4 class="fortune-title" id="love-title"></h4>
-          <p class="fortune-content" id="love-content"></p>
-        </div>
-
-        <!-- 광고 배너 #4: 결과 중간 -->
-        <div class="ad-banner ad-banner-result">
-          <ins class="kakao_ad_area" style="display:none;"
-               data-ad-unit="DAN-pPHi5SISItl4ng1C"
-               data-ad-width="320"
-               data-ad-height="100"></ins>
-        </div>
-
-        <!-- 행운 요소 그리드 -->
-        <div class="lucky-grid">
-          <div class="lucky-item animate-card">
-            <span class="lucky-icon">&#9200;</span>
-            <span class="lucky-label">행운의 시간</span>
-            <span class="lucky-value" id="lucky-time"></span>
-          </div>
-          <div class="lucky-item animate-card">
-            <span class="lucky-icon">&#127912;</span>
-            <span class="lucky-label">행운의 색깔</span>
-            <span class="lucky-value">
-              <span class="color-dot" id="lucky-color-dot"></span>
-              <span id="lucky-color"></span>
-            </span>
-          </div>
-          <div class="lucky-item animate-card">
-            <span class="lucky-icon">&#128290;</span>
-            <span class="lucky-label">행운의 번호</span>
-            <span class="lucky-value" id="lucky-numbers"></span>
-          </div>
-          <div class="lucky-item animate-card">
-            <span class="lucky-icon">&#9749;</span>
-            <span class="lucky-label">추천 간식</span>
-            <span class="lucky-value" id="lucky-snack"></span>
-          </div>
-        </div>
-
-        <!-- 오늘의 한마디 -->
-        <div class="fortune-card card-advice animate-card">
-          <div class="card-header">
-            <span class="card-icon">&#128172;</span>
-            <h3 class="card-title">오늘의 한마디</h3>
-          </div>
-          <p class="advice-content" id="advice-content"></p>
-        </div>
-
-        <!-- 주의사항 -->
-        <div class="fortune-card card-caution animate-card">
-          <div class="card-header">
-            <span class="card-icon">&#9888;&#65039;</span>
-            <h3 class="card-title">주의사항</h3>
-          </div>
-          <p class="caution-content" id="caution-content"></p>
-        </div>
-
-        <!-- 공유 섹션 -->
-        <div class="share-section">
-          <h4 class="share-title">친구에게 공유하기</h4>
-          <div class="share-buttons">
-            <button class="share-btn share-kakao" id="share-kakao">
-              <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3C6.477 3 2 6.463 2 10.691c0 2.765 1.834 5.182 4.584 6.527-.143.52-.548 1.99-.629 2.302-.098.379.14.373.294.272.12-.079 1.946-1.311 2.732-1.846.636.099 1.29.151 1.96.163h.117C16.476 18.109 22 14.637 22 10.69 22 6.463 17.523 3 12 3z"/>
-              </svg>
-              <span>카카오톡</span>
-            </button>
-            <button class="share-btn share-instagram" id="share-instagram">
-              <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-              </svg>
-              <span>인스타</span>
-            </button>
-            <button class="share-btn share-x" id="share-x">
-              <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-              <span>X</span>
-            </button>
-            <button class="share-btn share-url" id="share-url">
-              <svg class="share-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-              </svg>
-              <span>복사</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 다시보기 버튼 -->
-        <button class="retry-btn" id="retry-btn">
-          <span>다시 보기</span>
-        </button>
-
-        <!-- 광고 배너 #5: 결과 하단 -->
-        <div class="ad-banner ad-banner-bottom">
-          <ins class="kakao_ad_area" style="display:none;"
-               data-ad-unit="DAN-dYh9VIsfHjwCBykw"
-               data-ad-width="320"
-               data-ad-height="100"></ins>
-        </div>
-
-        <!-- 스트릭 배지 -->
+        <!-- 9. 스트릭 배지 -->
         <div class="streak-badge" id="streak-badge">
           <span class="streak-icon" id="streak-icon">&#128293;</span>
           <span class="streak-text" id="streak-text"></span>
