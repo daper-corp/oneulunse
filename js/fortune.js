@@ -198,7 +198,7 @@ const Fortune = {
            `${hookText}\n\n` +
            `💰 ${fortune.money.title}\n` +
            `❤️ ${fortune.love.title}\n` +
-           `🔢 행운의 번호: ${fortune.luckyNumbers.join(', ')}\n\n` +
+           `🎨 행운의 색: ${fortune.luckyColor.name}\n\n` +
            `💬 "${fortune.advice}"\n\n` +
            `내 운세도 확인해보기 👇`;
   }

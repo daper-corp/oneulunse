@@ -718,7 +718,7 @@ const App = {
 
     // 짧고 임팩트 있는 트윗 텍스트
     const tweetText = `🔮 ${fortune.overall.score}점! ${hookText} ${emoji}\n\n` +
-                      `행운의 번호: ${fortune.luckyNumbers.join(', ')}\n` +
+                      `🎨 행운의 색: ${fortune.luckyColor.name}\n` +
                       `"${fortune.advice}"\n\n` +
                       `내 운세도 확인해보기 👇`;
 
